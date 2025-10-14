@@ -1,0 +1,13 @@
+replicaCount: 1
+service:
+  type: NodePort
+  port: 80
+containerPort: 8080
+env:
+  - name: APP_ENV 
+    value: "dev"
+config:
+  WELCOME_MSG: "Hello from DEV"
+secrets:
+  API_KEY: ""
+resources: {} 

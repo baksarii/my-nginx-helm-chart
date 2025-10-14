@@ -1,0 +1,19 @@
+replicaCount: 3
+service:
+  type: LoadBalancer
+  port: 80
+containerPort: 8080
+env:
+  - name: APP_ENV
+    value: "prod"
+config:
+  WELCOME_MSG: "Hello from PROD"
+secrets:
+  API_KEY: "YOUR_PROD_API_KEY"
+resources:
+  requests:
+    cpu: "200m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
