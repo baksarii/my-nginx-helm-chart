@@ -11,3 +11,4 @@ resources:
     memory: "512Mi"
 secret:
   API_KEY: "prod-67890"
+rolloutToken: ""

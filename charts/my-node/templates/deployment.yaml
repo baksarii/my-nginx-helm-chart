@@ -16,6 +16,7 @@ spec:
       {{- with .Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
+        rollout/token: {{ .Values.rolloutToken | default "none" | quote }}
       {{- end }}
       labels:
         {{- include "my-node.labels" . | nindent 8 }}
