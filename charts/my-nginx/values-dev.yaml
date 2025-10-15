@@ -1,6 +1,6 @@
 replicaCount: 2
 service:
   type: NodePort
-  port: 80
+  port: "34234"
 resources: {}
 rolloutToken: "dev-b32892f"
