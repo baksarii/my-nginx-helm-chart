@@ -9,3 +9,5 @@ resources:
   limits:
     cpu: "500m"
     memory: "512Mi"
+secret:
+  API_KEY: "prod-67890"

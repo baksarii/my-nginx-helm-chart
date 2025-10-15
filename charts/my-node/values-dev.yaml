@@ -3,3 +3,5 @@ service:
   type: NodePort
   port: 80
 resources: {}
+secret:
+  API_KEY: "dev-12345"
