@@ -1,0 +1,59 @@
+name: "CI (prod): Helm Lint + Force Rolling (on tag)"
+
+on:
+  push:
+    tags:
+      - "v*"                  # v1.0.0 같은 태그 푸시 시
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  helm-prod:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history for tags)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.14.4
+
+      - name: Helm Lint (nginx)
+        run: helm lint ./charts/my-nginx
+
+      - name: Helm Lint (node)
+        run: helm lint ./charts/my-node
+
+      - name: Install yq
+        run: |
+          YQ_VERSION=v4.44.3
+          sudo wget -qO /usr/local/bin/yq "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64"
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Bump chart versions (tag-based)
+        run: |
+          V="${GITHUB_REF_NAME}"             # e.g., v1.2.3
+          V="${V#v}"                         # strip leading 'v'
+          sed -i "s/^version:.*/version: ${V}/" charts/my-nginx/Chart.yaml
+          sed -i "s/^version:.*/version: ${V}/" charts/my-node/Chart.yaml
+
+      # 🔥 prod 강제 롤링: tag 기준 토큰
+      - name: Set rollout token (prod)
+        run: |
+          TOKEN="prod-${GITHUB_REF_NAME}"
+          yq -i ".rolloutToken = \"${TOKEN}\"" charts/my-nginx/values-prod.yaml
+          yq -i ".rolloutToken = \"${TOKEN}\"" charts/my-node/values-prod.yaml
+
+      - name: Commit back & push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add charts/my-nginx/Chart.yaml charts/my-node/Chart.yaml \
+                  charts/my-nginx/values-prod.yaml charts/my-node/values-prod.yaml
+          git commit -m "ci(prod): bump chart to ${GITHUB_REF_NAME}, force rolling (token) [skip ci]" || echo "no changes"
+          git push || echo "no push"
