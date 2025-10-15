@@ -3,4 +3,4 @@ service:
   type: NodePort
   port: "80"
 resources: {}
-rolloutToken: "dev-890d0c7"
+rolloutToken: "dev-55960a2"
