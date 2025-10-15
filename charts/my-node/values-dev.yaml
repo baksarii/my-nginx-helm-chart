@@ -5,4 +5,4 @@ service:
 resources: {}
 secret:
   API_KEY: "dev-12345"
-rolloutToken: dev-4c269c4
+rolloutToken: dev-3226a73
