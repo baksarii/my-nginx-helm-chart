@@ -1,0 +1,11 @@
+replicaCount: 3
+service:
+  type: NodePort   # (Minikube에선 NodePort 권장, EKS 가면 LoadBalancer)
+  port: 80
+resources:
+  requests:
+    cpu: "200m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
