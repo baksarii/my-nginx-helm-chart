@@ -3,4 +3,4 @@ service:
   type: NodePort
   port: "rlahEl"
 resources: {}
-rolloutToken: "dev-9fd4682"
+rolloutToken: "dev-890d0c7"
