@@ -1,6 +1,6 @@
 replicaCount: 2
 service:
   type: NodePort
-  port: 80
+  port: "rlahEl"
 resources: {}
 rolloutToken: "dev-9fd4682"
