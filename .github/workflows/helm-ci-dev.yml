@@ -1,0 +1,47 @@
+name: "CI (dev): Helm Lint + Force Rolling"
+
+on:
+  push:
+    branches: [ "main" ]     # main 브랜치에 push될 때 자동 실행
+
+permissions:
+  contents: write
+
+jobs:
+  helm-dev:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.14.4
+
+      - name: Helm Lint (nginx)
+        run: helm lint ./charts/my-nginx
+
+      - name: Helm Lint (node)
+        run: helm lint ./charts/my-node
+
+      - name: Install yq
+        run: |
+          YQ_VERSION=v4.44.3
+          sudo wget -qO /usr/local/bin/yq "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64"
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Set rollout token (dev)
+        run: |
+          SHA=$(git rev-parse --short HEAD)
+          yq -i ".rolloutToken = \"dev-${SHA}\"" charts/my-nginx/values-dev.yaml
+          yq -i ".rolloutToken = \"dev-${SHA}\"" charts/my-node/values-dev.yaml
+
+      - name: Commit & Push back
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add charts/my-nginx/values-dev.yaml charts/my-node/values-dev.yaml
+          git commit -m "ci(dev): force rolling update [skip ci]" || echo "no changes"
+          git push || echo "no push"
