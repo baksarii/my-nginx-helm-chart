@@ -1,6 +1,6 @@
 replicaCount: 3
 service:
-  type: NodePort
+  type: LoadBalancer
   port: 80
 resources: {}
 secret:

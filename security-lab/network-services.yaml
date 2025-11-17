@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: net-lab
+spec:
+  selector:
+    role: backend
+  ports:
+    - port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  namespace: net-lab
+spec:
+  selector:
+    role: db
+  ports:
+    - port: 80
+      targetPort: 80

@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend
+  namespace: net-lab
+  labels:
+    role: frontend
+spec:
+  containers:
+  - name: curl
+    image: curlimages/curl
+    command: ["sleep", "3600"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: backend
+  namespace: net-lab
+  labels:
+    role: backend
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.25
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db
+  namespace: net-lab
+  labels:
+    role: db
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.25

@@ -1,0 +1,25 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: slack-alerts
+  namespace: monitoring
+  labels:
+    release: kube-prometheus    # ★ 이게 핵심 ★
+spec:
+  route:
+    receiver: monitoring/slack-alerts/slack-notifications
+    group_by: ["alertname"]
+  receivers:
+  - name: "slack-notifications"
+    slackConfigs:
+    - apiURL:
+        name: alertmanager-slack
+        key: slack_api_url
+      channel: "#alerts"      # Slack 채널 이름
+      sendResolved: true
+      title: "🚨 [{{ .Status | toUpper }}] {{ .CommonLabels.alertname }}"
+      text: >-
+        *Namespace:* {{ .CommonLabels.namespace }}
+        *Pod:* {{ .CommonLabels.pod }}
+        *Severity:* {{ .CommonLabels.severity }}
+        *Description:* {{ .CommonAnnotations.description }}

@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: test-force-alert
+  namespace: monitoring
+  labels:
+    release: kube-prometheus   # <-- 이것만 넣으면 Prometheus가 rule 읽음
+spec:
+  groups:
+  - name: test-alert.rules
+    rules:
+    - alert: SlackTestAlert
+      expr: vector(1)
+      for: 10s
+      labels:
+        severity: critical
+        namespace: monitoring
+      annotations:
+        summary: "Slack Webhook Test"
+        description: "This is a test alert from Alertmanager."
