@@ -3,4 +3,4 @@ service:
   type: LoadBalancer
   port: "80"
 resources: {}
-rolloutToken: "dev-19cee5f"
+rolloutToken: "dev-2711e9f"
