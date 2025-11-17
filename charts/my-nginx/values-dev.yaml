@@ -1,6 +1,6 @@
 replicaCount: 2
 service:
-  type: NodePort
+  type: LoadBalancer
   port: "80"
 resources: {}
 rolloutToken: "dev-cb22220"
