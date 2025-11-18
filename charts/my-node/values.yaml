@@ -7,8 +7,9 @@ replicaCount: 2
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: baksarii/my-api-dev
-  tag: "v2"
+  repository: baksarii/gitops-demo
+  tag: "v1"
+
 env:
   - name: APP_ENV
     value: "local"
