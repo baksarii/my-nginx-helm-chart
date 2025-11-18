@@ -1,0 +1,7 @@
+image:
+  repository: baksarii/gitops-demo
+  tag: "v1"
+
+service:
+  type: LoadBalancer
+  port: 80
