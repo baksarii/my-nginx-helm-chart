@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-static-site
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/baksarii/my-nginx-helm-chart.git   # ← 정현 repo
+    targetRevision: main
+    path: charts/my-static-site                       # ← Helm Chart 위치
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
