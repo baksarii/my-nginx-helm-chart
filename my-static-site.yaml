@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-static-site
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-static-site
+  template:
+    metadata:
+      labels:
+        app: my-static-site
+    spec:
+      containers:
+        - name: my-static-site
+          image: baksarii/gitops-demo:v1
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-static-site
+  namespace: default
+spec:
+  type: LoadBalancer
+  selector:
+    app: my-static-site
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+metadata:
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "instance"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-protocol: "HTTP"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-port: "80"
